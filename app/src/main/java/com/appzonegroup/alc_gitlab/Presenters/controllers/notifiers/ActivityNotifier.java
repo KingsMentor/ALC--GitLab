@@ -1,9 +1,10 @@
 package com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
 
 /**
  * Created by zone2 on 3/6/17.
@@ -24,16 +25,9 @@ public abstract class ActivityNotifier extends AppCompatActivity {
             activityNotifier = this;
     }
 
-    public void registerReceiver(String intentFilter) {
 
-    }
+    public abstract void notifyAdapterUpdate(GitUserListAdapter adapter);
 
-
-    public void unregisterReceiver(String intentFilter) {
-
-    }
-
-
-    protected abstract void notifyUpdate(Intent intent);
+    public abstract void failedDataRefresh();
 
 }
