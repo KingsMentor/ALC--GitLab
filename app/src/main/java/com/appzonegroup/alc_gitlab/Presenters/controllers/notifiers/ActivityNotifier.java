@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
 
 /**
@@ -26,8 +27,10 @@ public abstract class ActivityNotifier extends AppCompatActivity {
     }
 
 
-    public abstract void notifyAdapterUpdate(GitUserListAdapter adapter);
+    public abstract void notifyAdapterCreated(GitUserListAdapter adapter);
 
     public abstract void failedDataRefresh();
+
+    public abstract void notifyAdapterUpdated(GitUserRequestData gitUserRequestData);
 
 }

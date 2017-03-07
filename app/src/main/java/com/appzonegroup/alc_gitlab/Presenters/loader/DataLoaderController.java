@@ -21,9 +21,12 @@ public class DataLoaderController {
         Request<GitUserRequestData> request = new VolleyHelper().requestJavaDevelopersInLagos(new Response.Listener<GitUserRequestData>() {
             @Override
             public void onResponse(GitUserRequestData response) {
-                if (gitUserListAdapter == null)
-                    gitUserListAdapter = new GitUserListAdapter();
-                ActivityNotifier.getInstance().notifyAdapterUpdate(gitUserListAdapter);
+                if (gitUserListAdapter == null) {
+                    gitUserListAdapter = new GitUserListAdapter(response);
+                    ActivityNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
+                } else {
+                    ActivityNotifier.getInstance().notifyAdapterUpdated(response);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
