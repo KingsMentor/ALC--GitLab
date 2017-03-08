@@ -20,12 +20,17 @@ public class GitApplication extends Application {
     public static final String TAG = GitApplication.class
             .getSimpleName();
 
-    DataLoaderController dataLoaderController;
+    private DataLoaderController dataLoaderController;
 
     static GitApplication gitApplication;
 
     public synchronized static GitApplication getInstance() {
         return gitApplication;
+    }
+
+
+    public DataLoaderController getDataLoaderController() {
+        return this.dataLoaderController;
     }
 
     @Override

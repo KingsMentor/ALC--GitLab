@@ -13,9 +13,13 @@ import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.request.GitUserReque
 public class VolleyHelper {
     private final String URL = "https://api.github.com/search/users?q=language:java+location:Lagos";
 
-    public Request<GitUserRequestData> requestJavaDevelopersInLagos(
-            Response.Listener<GitUserRequestData> listener, Response.ErrorListener errorListener) {
-        return new GitUserRequest(URL, Request.Method.GET, GitUser.class, null, listener, errorListener);
+    public Request<GitUserRequestData> requestJavaDevelopersInLagos(int page,
+                                                                    Response.Listener<GitUserRequestData> listener, Response.ErrorListener errorListener) {
+        return new GitUserRequest(preparePageUrl(page), Request.Method.GET, GitUser.class, null, listener, errorListener);
 
+    }
+
+    private String preparePageUrl(int page) {
+        return URL + "&page=" + page;
     }
 }

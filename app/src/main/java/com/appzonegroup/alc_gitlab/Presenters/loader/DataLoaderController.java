@@ -16,26 +16,34 @@ import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
 public class DataLoaderController {
 
     GitUserListAdapter gitUserListAdapter;
+    private int page = 1;
+    private boolean isLoading;
 
     public void startLoadingData() {
-        Request<GitUserRequestData> request = new VolleyHelper().requestJavaDevelopersInLagos(new Response.Listener<GitUserRequestData>() {
-            @Override
-            public void onResponse(GitUserRequestData response) {
-                if (gitUserListAdapter == null) {
-                    gitUserListAdapter = new GitUserListAdapter(response);
-                    ActivityNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
-                } else {
-                    ActivityNotifier.getInstance().notifyAdapterUpdated(response);
+        if (!isLoading) {
+            isLoading = true;
+            Request<GitUserRequestData> request = new VolleyHelper().requestJavaDevelopersInLagos(page, new Response.Listener<GitUserRequestData>() {
+                @Override
+                public void onResponse(GitUserRequestData response) {
+                    isLoading = false;
+                    page++;
+                    if (gitUserListAdapter == null) {
+                        gitUserListAdapter = new GitUserListAdapter(response);
+                        ActivityNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
+                    } else {
+                        gitUserListAdapter.updateData(response);
+                        ActivityNotifier.getInstance().notifyAdapterUpdated(response);
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ActivityNotifier.getInstance().failedDataRefresh();
-            }
-        });
-        GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    isLoading = false;
+                    ActivityNotifier.getInstance().failedDataRefresh();
+                }
+            });
+            GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
+        }
     }
-
 
 }

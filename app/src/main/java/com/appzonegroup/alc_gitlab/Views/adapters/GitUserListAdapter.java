@@ -45,4 +45,9 @@ public class GitUserListAdapter extends RecyclerView.Adapter<GitUserAdapterViewH
     private String getImageUrl(int position) {
         return mGitUserRequestData.getGitUsers().get(position).getAvatarUrl();
     }
+
+    public void updateData(GitUserRequestData gitUserRequestData) {
+        mGitUserRequestData.getGitUsers().addAll(gitUserRequestData.getGitUsers());
+        notifyDataSetChanged();
+    }
 }

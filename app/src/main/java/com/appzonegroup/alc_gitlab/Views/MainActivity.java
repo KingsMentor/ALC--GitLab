@@ -2,22 +2,24 @@ package com.appzonegroup.alc_gitlab.Views;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
+import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.ActivityNotifier;
 import com.appzonegroup.alc_gitlab.R;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
+import com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView;
 
-public class MainActivity extends ActivityNotifier {
+public class MainActivity extends ActivityNotifier implements EnhanceRecyclerView.listenToScroll {
 
-    RecyclerView recyclerView;
+    EnhanceRecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = (RecyclerView) findViewById(R.id.git_users);
+        recyclerView = (EnhanceRecyclerView) findViewById(R.id.git_users);
+        recyclerView.listen(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
 
@@ -44,4 +46,8 @@ public class MainActivity extends ActivityNotifier {
 
     }
 
+    @Override
+    public void reachedEndOfList() {
+        GitApplication.getInstance().getDataLoaderController().startLoadingData();
+    }
 }
