@@ -43,7 +43,8 @@ public class EnhanceRecyclerView extends RecyclerView {
         super.onScrolled(dx, dy);
         if (mAdapter != null)
             if (mLayoutManager.findLastCompletelyVisibleItemPosition() == mAdapter.getItemCount() - 1) {
-                scrollCallback.reachedEndOfList();
+                if (scrollCallback != null)
+                    scrollCallback.reachedEndOfList();
             }
     }
 

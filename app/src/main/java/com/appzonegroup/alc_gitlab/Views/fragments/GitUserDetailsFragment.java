@@ -6,15 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.Response;
 import com.appzonegroup.alc_gitlab.Models.GitUser;
+import com.appzonegroup.alc_gitlab.Models.GitUserDetails;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.R;
+import com.appzonegroup.alc_gitlab.Views.adapters.GitUserDetailAdapter;
+import com.appzonegroup.alc_gitlab.Views.enhanceViews.DividerItemDecoration;
+import com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView;
 import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,6 +35,7 @@ public class GitUserDetailsFragment extends Fragment {
 
     CircleImageView circleImageView;
     AppCompatTextView profileName;
+    EnhanceRecyclerView enhanceRecyclerView;
 
     public GitUserDetailsFragment bundleInstance(GitUser gitUser) {
         Bundle bundle = new Bundle();
@@ -43,6 +50,7 @@ public class GitUserDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.git_user_details, container, false);
         circleImageView = (CircleImageView) rootView.findViewById(R.id.profile_image);
         profileName = (AppCompatTextView) rootView.findViewById(R.id.git_user_name);
+        enhanceRecyclerView = (EnhanceRecyclerView) rootView.findViewById(R.id.git_user_details_list);
         profileName.setText(getGitUser().getLogin());
         Glide.with(getContext()).load(Uri.parse(getGitUser().getAvatarUrl())).into(circleImageView);
 
@@ -58,8 +66,17 @@ public class GitUserDetailsFragment extends Fragment {
                 }
             }
         });
-        retrieveUserDetails(getGitUser());
+        initRecyclerview();
+        retrieveUserDetails(getGitUser(), rootView);
         return rootView;
+    }
+
+
+    private void initRecyclerview() {
+        enhanceRecyclerView.addItemDecoration(new DividerItemDecoration(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider), false, false));
+        enhanceRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        enhanceRecyclerView.setHasFixedSize(false);
+        enhanceRecyclerView.setNestedScrollingEnabled(false);
     }
 
     private String generateIntentMessage(GitUser gitUser) {
@@ -70,12 +87,15 @@ public class GitUserDetailsFragment extends Fragment {
         return getArguments().getParcelable(GIT_USER);
     }
 
-    private void retrieveUserDetails(GitUser gitUser) {
-        GitApplication.getInstance().getDataLoaderController().retrieveUserDetails(gitUser, new Response.Listener() {
+    private void retrieveUserDetails(final GitUser gitUser, final View rootView) {
+        GitApplication.getInstance().getDataLoaderController().retrieveUserDetails(gitUser, new Response.Listener<GitUserDetails>() {
             @Override
-            public void onResponse(Object response) {
-
+            public void onResponse(GitUserDetails gitUserDetails) {
+                rootView.findViewById(R.id.loadingView).setVisibility(View.GONE);
+                enhanceRecyclerView.setAdapter(new GitUserDetailAdapter(gitUserDetails));
             }
         });
     }
+
+
 }

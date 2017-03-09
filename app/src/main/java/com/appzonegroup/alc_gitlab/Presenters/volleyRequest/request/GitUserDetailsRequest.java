@@ -36,7 +36,7 @@ public class GitUserDetailsRequest extends Request<GitUserDetails> {
      * @param headers Map of request headers
      */
     public GitUserDetailsRequest(String url, int method, Class<GitUserDetails> clazz, Map<String, String> headers,
-                                 Response.Listener listener, Response.ErrorListener errorListener) {
+                                 Response.Listener<GitUserDetails> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         this.clazz = clazz;
         this.headers = headers;

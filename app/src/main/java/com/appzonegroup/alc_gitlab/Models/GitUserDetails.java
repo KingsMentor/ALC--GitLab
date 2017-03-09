@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 
 public class GitUserDetails implements Parcelable {
-    String name, company, blog, location, email, bio;
+    String name, company, blog, location, email, bio, html_url;
     boolean hireable;
     int followers, following, public_repos, public_gists;
 
@@ -16,6 +16,7 @@ public class GitUserDetails implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(html_url);
         dest.writeString(company);
         dest.writeString(blog);
         dest.writeString(location);
@@ -90,6 +91,16 @@ public class GitUserDetails implements Parcelable {
         return this;
     }
 
+    public String getProfileUrl() {
+        return this.html_url;
+    }
+
+
+    public GitUserDetails setProfileUrl(String html_url) {
+        this.html_url = html_url;
+        return this;
+    }
+
     public String getBio() {
         return this.bio;
     }
@@ -146,6 +157,7 @@ public class GitUserDetails implements Parcelable {
 
     protected GitUserDetails(Parcel in) {
         name = in.readString();
+        html_url = in.readString();
         company = in.readString();
         blog = in.readString();
         location = in.readString();

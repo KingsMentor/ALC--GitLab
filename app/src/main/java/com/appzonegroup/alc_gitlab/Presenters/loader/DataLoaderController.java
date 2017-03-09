@@ -55,13 +55,14 @@ public class DataLoaderController {
         }
     }
 
-    public void retrieveUserDetails(GitUser gitUser, Response.Listener listener) {
-        new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, new Response.ErrorListener() {
+    public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener) {
+        Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
             }
         });
+        GitApplication.getInstance().addToRequestQueue(request, gitUser.getUrl());
     }
 
 }
