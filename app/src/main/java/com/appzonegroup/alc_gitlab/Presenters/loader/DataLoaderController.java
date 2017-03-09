@@ -3,11 +3,15 @@ package com.appzonegroup.alc_gitlab.Presenters.loader;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.appzonegroup.alc_gitlab.Models.GitUser;
+import com.appzonegroup.alc_gitlab.Models.GitUserDetails;
 import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.ActivityNotifier;
 import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.helper.VolleyHelper;
+import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.request.GitUserDetailsRequest;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
+import com.appzonegroup.alc_gitlab.Views.viewHolders.GitUserAdapterViewHolder;
 
 /**
  * Created by zone2 on 3/5/17.
@@ -28,7 +32,12 @@ public class DataLoaderController {
                     isLoading = false;
                     page++;
                     if (gitUserListAdapter == null) {
-                        gitUserListAdapter = new GitUserListAdapter(response);
+                        gitUserListAdapter = new GitUserListAdapter(response) {
+                            @Override
+                            public void onItemSelected(GitUserAdapterViewHolder holder, GitUser gitUser, int position) {
+                                ActivityNotifier.getInstance().onItemSelected(holder, gitUser, position);
+                            }
+                        };
                         ActivityNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
                     } else {
                         gitUserListAdapter.updateData(response);
@@ -44,6 +53,15 @@ public class DataLoaderController {
             });
             GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
         }
+    }
+
+    public void retrieveUserDetails(GitUser gitUser, Response.Listener listener) {
+        new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
 }

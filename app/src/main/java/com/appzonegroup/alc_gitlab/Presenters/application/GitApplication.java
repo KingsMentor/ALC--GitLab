@@ -7,6 +7,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.appzonegroup.alc_gitlab.Presenters.loader.DataLoaderController;
+import com.appzonegroup.alc_gitlab.R;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by zone2 on 3/5/17.
@@ -39,7 +42,16 @@ public class GitApplication extends Application {
         gitApplication = this;
         dataLoaderController = new DataLoaderController();
         dataLoaderController.startLoadingData();
+        defineCalligraphy();
 
+    }
+
+    private void defineCalligraphy() {
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/source_code.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     public RequestQueue getRequestQueue() {
@@ -67,4 +79,6 @@ public class GitApplication extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
+
 }
