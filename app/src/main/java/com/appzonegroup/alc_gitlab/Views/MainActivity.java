@@ -1,13 +1,18 @@
 package com.appzonegroup.alc_gitlab.Views;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.R;
+import com.appzonegroup.alc_gitlab.Views.fragments.GitUsersListFragment;
 import com.appzonegroup.alc_gitlab.Views.fragments.Welcome;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +25,16 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.root_frame, new Welcome())
                 .commitAllowingStateLoss();
-        GitApplication.getInstance().getDataLoaderController().startLoadingData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager().beginTransaction().replace(R.id.root_frame, new GitUsersListFragment())
+                        .commitAllowingStateLoss();
+                getSupportActionBar().show();
+                GitApplication.getInstance().getDataLoaderController().startLoadingData();
+            }
+        }, 5000);
+
     }
 
     public Menu menu;
@@ -39,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.filter).setVisible(true);
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }
 
