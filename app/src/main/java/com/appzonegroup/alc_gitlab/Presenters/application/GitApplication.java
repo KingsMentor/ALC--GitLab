@@ -41,7 +41,6 @@ public class GitApplication extends Application {
         super.onCreate();
         gitApplication = this;
         dataLoaderController = new DataLoaderController();
-        dataLoaderController.startLoadingData();
         defineCalligraphy();
 
     }

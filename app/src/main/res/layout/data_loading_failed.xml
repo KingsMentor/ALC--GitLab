@@ -6,20 +6,20 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.AppCompatTextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Failed to load data.\nKindly retry."
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/reload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="reload" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Failed to load data.\nKindly Swipe to retry."
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

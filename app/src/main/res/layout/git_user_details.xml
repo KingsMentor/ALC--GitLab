@@ -7,7 +7,10 @@
     android:background="@color/white"
     android:clickable="true">
 
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,14 +64,20 @@
 
             <include layout="@layout/loading_view" />
 
-            <com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView
-                android:id="@+id/git_user_details_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <include layout="@layout/failed_page_view" />
+
+
+
+                <com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView
+                    android:id="@+id/git_user_details_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
         </LinearLayout>
 
 
     </android.support.v4.widget.NestedScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/share"

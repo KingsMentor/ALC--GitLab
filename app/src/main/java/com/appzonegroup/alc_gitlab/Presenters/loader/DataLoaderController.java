@@ -7,7 +7,7 @@ import com.appzonegroup.alc_gitlab.Models.GitUser;
 import com.appzonegroup.alc_gitlab.Models.GitUserDetails;
 import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
-import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.ActivityNotifier;
+import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.UpdateNotifier;
 import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.helper.VolleyHelper;
 import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.request.GitUserDetailsRequest;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
@@ -35,33 +35,31 @@ public class DataLoaderController {
                         gitUserListAdapter = new GitUserListAdapter(response) {
                             @Override
                             public void onItemSelected(GitUserAdapterViewHolder holder, GitUser gitUser, int position) {
-                                ActivityNotifier.getInstance().onItemSelected(holder, gitUser, position);
+                                UpdateNotifier.getInstance().onItemSelected(holder, gitUser, position);
                             }
                         };
-                        ActivityNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
+                        if (UpdateNotifier.getInstance() != null)
+                            UpdateNotifier.getInstance().notifyAdapterCreated(gitUserListAdapter);
                     } else {
                         gitUserListAdapter.updateData(response);
-                        ActivityNotifier.getInstance().notifyAdapterUpdated(response);
+                        if (UpdateNotifier.getInstance() != null)
+                            UpdateNotifier.getInstance().notifyAdapterUpdated(response);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     isLoading = false;
-                    ActivityNotifier.getInstance().failedDataRefresh();
+                    if (UpdateNotifier.getInstance() != null)
+                        UpdateNotifier.getInstance().failedDataRefresh();
                 }
             });
             GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
         }
     }
 
-    public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener) {
-        Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
+    public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener, Response.ErrorListener errorListener) {
+        Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, errorListener);
         GitApplication.getInstance().addToRequestQueue(request, gitUser.getUrl());
     }
 
