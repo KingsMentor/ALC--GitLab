@@ -20,7 +20,8 @@ import com.appzonegroup.alc_gitlab.Models.GitUser;
 import com.appzonegroup.alc_gitlab.Models.GitUserDetails;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.R;
-import com.appzonegroup.alc_gitlab.Views.MainActivity;
+import com.appzonegroup.alc_gitlab.Views.activities.MainActivity;
+import com.appzonegroup.alc_gitlab.Views.activities.ProfileImageView;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserDetailAdapter;
 import com.appzonegroup.alc_gitlab.Views.enhanceViews.DividerItemDecoration;
 import com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView;
@@ -53,6 +54,14 @@ public class GitUserDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.git_user_details, container, false);
         circleImageView = (CircleImageView) rootView.findViewById(R.id.profile_image);
+
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.getContext().startActivity(new Intent(view.getContext(), ProfileImageView.class)
+                        .putExtra(ProfileImageView.INTENT_DATA, getGitUser()));
+            }
+        });
         profileName = (AppCompatTextView) rootView.findViewById(R.id.git_user_name);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         enhanceRecyclerView = (EnhanceRecyclerView) rootView.findViewById(R.id.git_user_details_list);

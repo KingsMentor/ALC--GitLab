@@ -1,15 +1,24 @@
 package com.appzonegroup.alc_gitlab.Views.fragments;
 
 import android.animation.Animator;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -20,7 +29,7 @@ import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.UpdateNotifier;
 import com.appzonegroup.alc_gitlab.R;
-import com.appzonegroup.alc_gitlab.Views.MainActivity;
+import com.appzonegroup.alc_gitlab.Views.activities.MainActivity;
 import com.appzonegroup.alc_gitlab.Views.adapters.GitUserListAdapter;
 import com.appzonegroup.alc_gitlab.Views.enhanceViews.DividerItemDecoration;
 import com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView;
@@ -32,6 +41,9 @@ import com.appzonegroup.alc_gitlab.Views.viewHolders.GitUserAdapterViewHolder;
 
 public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyclerView.listenToScroll {
 
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private EnhanceRecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -65,7 +77,7 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
             }
         });
         setHasOptionsMenu(true);
-
+        initSideBar(rootView);
         return rootView;
     }
 
@@ -120,6 +132,45 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
 
     }
 
+    private void initSideBar(View rootView) {
+
+        drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
+
+        // set a custom shadow that overlays the main content when the drawer opens
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+//
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.tool_bar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if (!item.isChecked()) {
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                item.setCheckable(true);
+                return true;
+            }
+        });
+
+    }
 
     @Override
     public void reachedEndOfList() {
@@ -179,4 +230,17 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
             ((MainActivity) getActivity()).menu.findItem(R.id.filter).setVisible(true);
     }
 
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggle
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        drawerLayout.openDrawer(Gravity.RIGHT);
+        return super.onOptionsItemSelected(item);
+    }
 }

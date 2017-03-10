@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/activity_main"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        tools:context="com.appzonegroup.alc_gitlab.Views.MainActivity">
+        tools:openDrawer="right">
+
+        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/activity_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                tools:context="com.appzonegroup.alc_gitlab.Views.activities.MainActivity">
 
 
-        <com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView
-            android:id="@+id/git_users"
+                <com.appzonegroup.alc_gitlab.Views.enhanceViews.EnhanceRecyclerView
+                    android:id="@+id/git_users"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <include layout="@layout/loading_view" />
+            </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.design.widget.CoordinatorLayout>
+
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_gravity="right"
+            app:itemTextColor="#757575"
+            app:menu="@menu/filter_menu" />
+    </android.support.v4.widget.DrawerLayout>
 
-        <include layout="@layout/loading_view" />
-    </android.support.v7.widget.LinearLayoutCompat>
 
     <include
         android:id="@+id/error_page"

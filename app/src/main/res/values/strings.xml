@@ -3,4 +3,6 @@
     <string name="menu_filter">Filter-Gitlab</string>
     <string name="profile_image_transition">profile_image_transition</string>
     <string name="profile_name_transition">profile_name_transition</string>
+    <string name="followers">Followers</string>
+    <string name="repo">Repositories</string>
 </resources>

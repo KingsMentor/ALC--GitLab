@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appzonegroup.alc_gitlab.R;
-import com.appzonegroup.alc_gitlab.Views.MainActivity;
+import com.appzonegroup.alc_gitlab.Views.activities.MainActivity;
 
 /**
  * Created by zone2 on 3/9/17.

@@ -1,10 +1,10 @@
-package com.appzonegroup.alc_gitlab.Views;
+package com.appzonegroup.alc_gitlab.Views.activities;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
@@ -16,12 +16,15 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.github_circle));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.root_frame, new Welcome())
                 .commitAllowingStateLoss();
@@ -33,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().show();
                 GitApplication.getInstance().getDataLoaderController().startLoadingData();
             }
-        }, 5000);
+        }, 2500);
+
 
     }
 
@@ -55,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+
+
 }
 
 
