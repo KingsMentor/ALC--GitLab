@@ -107,30 +107,32 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
 
     @Override
     public void onItemSelected(GitUserAdapterViewHolder holder, GitUser gitUser, int position) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        GitUserDetailsFragment gitUserDetailsFragment = new GitUserDetailsFragment().bundleInstance(gitUser);
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.addToBackStack(null);
+            GitUserDetailsFragment gitUserDetailsFragment = new GitUserDetailsFragment().bundleInstance(gitUser);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            gitUserDetailsFragment.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image));
 
 
-            gitUserDetailsFragment.setSharedElementReturnTransition(TransitionInflater.from(
-                    getActivity()).inflateTransition(R.transition.change_image));
-            gitUserDetailsFragment.setExitTransition(TransitionInflater.from(
-                    getActivity()).inflateTransition(android.R.transition.fade));
+                gitUserDetailsFragment.setSharedElementReturnTransition(TransitionInflater.from(
+                        getActivity()).inflateTransition(R.transition.change_image));
+                gitUserDetailsFragment.setExitTransition(TransitionInflater.from(
+                        getActivity()).inflateTransition(android.R.transition.fade));
 
-            gitUserDetailsFragment.setSharedElementEnterTransition(TransitionInflater.from(
-                    getActivity()).inflateTransition(R.transition.change_image));
-            gitUserDetailsFragment.setEnterTransition(TransitionInflater.from(
-                    getActivity()).inflateTransition(android.R.transition.fade));
+                gitUserDetailsFragment.setSharedElementEnterTransition(TransitionInflater.from(
+                        getActivity()).inflateTransition(R.transition.change_image));
+                gitUserDetailsFragment.setEnterTransition(TransitionInflater.from(
+                        getActivity()).inflateTransition(android.R.transition.fade));
 
-            fragmentTransaction.addSharedElement(holder.gitUserProfileImageView, getString(R.string.profile_image_transition));
-            fragmentTransaction.addSharedElement(holder.gitUserProfileNameField, getString(R.string.profile_name_transition));
+                fragmentTransaction.addSharedElement(holder.gitUserProfileImageView, getString(R.string.profile_image_transition));
+                fragmentTransaction.addSharedElement(holder.gitUserProfileNameField, getString(R.string.profile_name_transition));
 
+            }
+
+            fragmentTransaction.add(R.id.root_frame, gitUserDetailsFragment).commitAllowingStateLoss();
         }
-
-        fragmentTransaction.add(R.id.root_frame, gitUserDetailsFragment).commitAllowingStateLoss();
 
     }
 
