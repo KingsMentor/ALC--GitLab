@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.root_frame, new Welcome())
                 .commitAllowingStateLoss();
+        // delay for 5 secs before launching the Git User List page
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         int fragmentInBackStack = getSupportFragmentManager().getBackStackEntryCount();
+        // is the user is currently on the details page
         if (fragmentInBackStack == 1) {
             menu.findItem(R.id.filter).setVisible(true);
         }
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        // set base context for font
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 

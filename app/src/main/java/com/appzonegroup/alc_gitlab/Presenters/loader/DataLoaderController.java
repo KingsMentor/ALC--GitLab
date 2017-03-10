@@ -28,6 +28,7 @@ public class DataLoaderController {
     private Sort currentSort = Sort.FOLLOWERS;
 
 
+//    retrieve list of java git hub users in lagos
     public void startLoadingData(Sort sortBy) {
         if (currentSort != sortBy) {
             page = 1;
@@ -71,6 +72,7 @@ public class DataLoaderController {
         }
     }
 
+    // retrieve git user details
     public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener, Response.ErrorListener errorListener) {
         Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, errorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
