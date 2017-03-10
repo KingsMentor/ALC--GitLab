@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.appzonegroup.alc_gitlab.Models.enums.Sort;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.R;
 import com.appzonegroup.alc_gitlab.Views.fragments.GitUsersListFragment;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.root_frame, new GitUsersListFragment())
                         .commitAllowingStateLoss();
                 getSupportActionBar().show();
-                GitApplication.getInstance().getDataLoaderController().startLoadingData();
+                GitApplication.getInstance().getDataLoaderController().startLoadingData(Sort.FOLLOWERS);
             }
         }, 2500);
 
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 
 
 }

@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/fellowers"
+            android:id="@+id/followers"
             android:checked="true"
             android:title="@string/followers" />
 
@@ -11,5 +11,9 @@
             android:id="@+id/repo"
             android:checked="false"
             android:title="@string/repo" />
+        <item
+            android:id="@+id/joined"
+            android:checked="false"
+            android:title="@string/joined" />
     </group>
 </menu>

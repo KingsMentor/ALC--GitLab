@@ -5,4 +5,5 @@
     <string name="profile_name_transition">profile_name_transition</string>
     <string name="followers">Followers</string>
     <string name="repo">Repositories</string>
+    <string name="joined">Dated Joined</string>
 </resources>

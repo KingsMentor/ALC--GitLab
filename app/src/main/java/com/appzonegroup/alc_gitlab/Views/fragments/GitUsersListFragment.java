@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.appzonegroup.alc_gitlab.Models.GitUser;
 import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
+import com.appzonegroup.alc_gitlab.Models.enums.Sort;
 import com.appzonegroup.alc_gitlab.Presenters.application.GitApplication;
 import com.appzonegroup.alc_gitlab.Presenters.controllers.notifiers.UpdateNotifier;
 import com.appzonegroup.alc_gitlab.R;
@@ -70,7 +72,7 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
             @Override
             public void onRefresh() {
                 if (recyclerView.getAdapter() == null) {
-                    GitApplication.getInstance().getDataLoaderController().startLoadingData();
+                    GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(-1));
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -157,25 +159,30 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
+        navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if (!item.isChecked()) {
+                    item.setChecked(true);
                     drawerLayout.closeDrawer(Gravity.RIGHT);
+                    showLoadingView();
+                    GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(item.getItemId()));
                 }
-                item.setCheckable(true);
+
                 return true;
             }
         });
 
     }
 
+    NavigationView navigationView;
+
     @Override
     public void reachedEndOfList() {
         showLoadingView();
-        GitApplication.getInstance().getDataLoaderController().startLoadingData();
+        GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(-1));
     }
 
 
@@ -242,5 +249,22 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
     public boolean onOptionsItemSelected(MenuItem item) {
         drawerLayout.openDrawer(Gravity.RIGHT);
         return super.onOptionsItemSelected(item);
+    }
+
+    private Sort getSortBy(int itemId) {
+        return (itemId == -1 || itemId == R.id.followers) ? Sort.FOLLOWERS : itemId == R.id.repo ? Sort.REPO : Sort.JOINED;
+
+    }
+
+    private int getCheckedItem() {
+        Menu menu = navigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.isChecked()) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

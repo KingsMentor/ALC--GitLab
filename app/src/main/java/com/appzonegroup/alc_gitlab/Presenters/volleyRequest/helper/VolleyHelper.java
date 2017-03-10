@@ -4,6 +4,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.appzonegroup.alc_gitlab.Models.GitUser;
 import com.appzonegroup.alc_gitlab.Models.GitUserRequestData;
+import com.appzonegroup.alc_gitlab.Models.enums.Sort;
 import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.request.GitUserRequest;
 
 /**
@@ -13,13 +14,13 @@ import com.appzonegroup.alc_gitlab.Presenters.volleyRequest.request.GitUserReque
 public class VolleyHelper {
     private final String URL = "https://api.github.com/search/users?q=language:java+location:Lagos";
 
-    public Request<GitUserRequestData> requestJavaDevelopersInLagos(int page,
+    public Request<GitUserRequestData> requestJavaDevelopersInLagos(Sort sort, int page,
                                                                     Response.Listener<GitUserRequestData> listener, Response.ErrorListener errorListener) {
-        return new GitUserRequest(preparePageUrl(page), Request.Method.GET, GitUser.class, null, listener, errorListener);
+        return new GitUserRequest(preparePageUrl(sort, page), Request.Method.GET, GitUser.class, null, listener, errorListener);
 
     }
 
-    private String preparePageUrl(int page) {
-        return URL + "&page=" + page;
+    private String preparePageUrl(Sort sort, int page) {
+        return URL + "&page=" + page + "&sort=" + sort.getName();
     }
 }
