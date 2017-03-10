@@ -66,14 +66,14 @@ public class DataLoaderController {
                         UpdateNotifier.getInstance().failedDataRefresh();
                 }
             });
-            request.setRetryPolicy(new DefaultRetryPolicy(5000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
         }
     }
 
     public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener, Response.ErrorListener errorListener) {
         Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, errorListener);
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         GitApplication.getInstance().addToRequestQueue(request, gitUser.getUrl());
     }
 
