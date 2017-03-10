@@ -1,5 +1,6 @@
 package com.appzonegroup.alc_gitlab.Presenters.loader;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -65,12 +66,14 @@ public class DataLoaderController {
                         UpdateNotifier.getInstance().failedDataRefresh();
                 }
             });
+            request.setRetryPolicy(new DefaultRetryPolicy(5000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             GitApplication.getInstance().addToRequestQueue(request, DataLoaderController.class.getSimpleName());
         }
     }
 
     public void retrieveUserDetails(GitUser gitUser, Response.Listener<GitUserDetails> listener, Response.ErrorListener errorListener) {
         Request request = new GitUserDetailsRequest(gitUser.getUrl(), Request.Method.GET, GitUserDetails.class, null, listener, errorListener);
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         GitApplication.getInstance().addToRequestQueue(request, gitUser.getUrl());
     }
 
