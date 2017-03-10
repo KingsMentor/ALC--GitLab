@@ -163,13 +163,12 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+                drawerLayout.closeDrawer(Gravity.RIGHT);
                 if (loadingView.getVisibility() == View.VISIBLE) {
                     return false;
                 } else {
                     if (!item.isChecked()) {
                         item.setChecked(true);
-                        drawerLayout.closeDrawer(Gravity.RIGHT);
                         showLoadingView();
                         GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(item.getItemId()));
                     }

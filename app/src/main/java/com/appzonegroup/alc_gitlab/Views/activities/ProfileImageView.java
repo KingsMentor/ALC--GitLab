@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import com.appzonegroup.alc_gitlab.Models.GitUser;
 import com.appzonegroup.alc_gitlab.R;
@@ -24,10 +26,16 @@ public class ProfileImageView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_profile_image_view);
+        getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         AppCompatImageView gitProfileImageView = (AppCompatImageView) findViewById(R.id.profile_image);
         AppCompatTextView gitProfileUserName = (AppCompatTextView) findViewById(R.id.git_user_name);
+        AppCompatTextView gitProfileUrl = (AppCompatTextView) findViewById(R.id.profile_url);
+
+
         Glide.with(this).load(Uri.parse(getGitUser().getAvatarUrl())).listener(new RequestListener<Uri, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -42,8 +50,10 @@ public class ProfileImageView extends AppCompatActivity {
                 return false;
             }
         }).into(gitProfileImageView);
+
         gitProfileUserName.setText(getGitUser().getLogin());
-        setFinishOnTouchOutside(true);
+        gitProfileUrl.setText(getGitUser().getHtmlUrl());
+        implementDismissinOnTouch();
     }
 
     private GitUser getGitUser() {
@@ -51,10 +61,18 @@ public class ProfileImageView extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    private void implementDismissinOnTouch() {
+        findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 }
