@@ -164,14 +164,18 @@ public class GitUsersListFragment extends UpdateNotifier implements EnhanceRecyc
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                if (!item.isChecked()) {
-                    item.setChecked(true);
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                    showLoadingView();
-                    GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(item.getItemId()));
-                }
+                if (loadingView.getVisibility() == View.VISIBLE) {
+                    return false;
+                } else {
+                    if (!item.isChecked()) {
+                        item.setChecked(true);
+                        drawerLayout.closeDrawer(Gravity.RIGHT);
+                        showLoadingView();
+                        GitApplication.getInstance().getDataLoaderController().startLoadingData(getSortBy(item.getItemId()));
+                    }
 
-                return true;
+                    return true;
+                }
             }
         });
 
